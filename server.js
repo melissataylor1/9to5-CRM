@@ -23,7 +23,7 @@ function start() {
         'Exit'
       ]})
     .then(answer => {
-      switch (answer.toDo) {
+      switch (answer.options) {
         case 'View all employees':
           viewAllEmp();
           break;
@@ -49,9 +49,18 @@ function start() {
           updateEmpRole();
           break;
         case 'EXIT':
-          exitApp();
-          break;
+          console.log("Exiting Application");
+          process.exit(0);
+        
       }
     });
 };
-    }
+//View All Employees Function
+  const viewAllEmp = () => {
+  db.findAllEmployees()
+    .then(([rows]) => {
+      let employees = rows
+      console.table(employees)
+    })
+    .then(() => start())
+}
