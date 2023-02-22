@@ -16,25 +16,31 @@ function start() {
         'View all departments',
         'View all roles',
         'View all employees',
+        'View budgets by Department',
+        new inquirer.Separator(),
         'Add a department',
         'Add a role',
         'Add an employee',
+        new inquirer.Separator(),
         'Update an employee role',
         'Exit'
       ]})
     .then(answer => {
       switch (answer.options) {
         case 'View all employees':
-          viewAllEmp();
+          viewAllEmployees();
           break;
         case 'View all departments':
-          viewAllDepart();
+          viewAllDepartment();
           break;
-        case 'View all employees by Department':
-          viewEmpByDepart();
+        case 'View employees by Department':
+          viewEmployeeByDepartment();
           break;
         case 'View all roles':
           viewAllRoles();
+          break;
+        case 'View budgets by Department':
+          viewBudgetByDepartment();
           break;
         case 'Add employee':
           addEmployee();
@@ -46,7 +52,7 @@ function start() {
           addRole();
           break;
         case 'Update employee role':
-          updateEmpRole();
+          updateEmployeeRole();
           break;
         case 'EXIT':
           console.log("Exiting Application");
@@ -55,12 +61,35 @@ function start() {
       }
     });
 };
+
 //View All Employees Function
-  const viewAllEmp = () => {
+  const viewAllEmployees = () => {
   db.findAllEmployees()
     .then(([rows]) => {
       let employees = rows
       console.table(employees)
+    })
+    .then(() => start())
+}
+
+//View Employee by Department
+
+const viewEmployeeByDepartment = () => {
+  db.findAllDepartments()
+    .then(([rows]) => {
+      let departments = rows
+      console.table(departments)
+    })
+    .then(() => start())
+}
+
+//View Employee by Manager
+
+const viewBudgetByDepartment = () => {
+  db.findAllBudgets()
+    .then(([rows]) => {
+      let departments = rows
+      console.table(departments)
     })
     .then(() => start())
 }
