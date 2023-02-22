@@ -8,8 +8,9 @@ const connection = require('./db/connect'); //SQL access connection
 start()
 // Function to prompt the user for what they would like to do
 function start() {
-    inquirer.prompt(
-      {name: 'options',
+  inquirer.prompt(
+    {
+      name: 'options',
       type: 'list',
       message: 'What would you like to do?',
       choices: [
@@ -25,7 +26,8 @@ function start() {
         'Update an employee role',
         new inquirer.Separator(),
         'Exit'
-      ]})
+      ]
+    })
 
 
     .then(answer => {
@@ -70,13 +72,13 @@ function start() {
         case 'EXIT':
           console.log("Exiting Application");
           process.exit(0);
-        
+
       }
     });
 };
 
 //View All Employees
-  const viewAllEmployees = () => {
+const viewAllEmployees = () => {
   db.findAllEmployees()
     .then(([rows]) => {
       let employees = rows
@@ -127,7 +129,7 @@ const viewBudgetByDepartment = () => {
 
 
 //Add Department
-function addDepartment(){
+function addDepartment() {
   inquirer.prompt([
     {
       type: 'input',
@@ -148,40 +150,40 @@ function addDepartment(){
 }
 
 //Add a Role
-function addRole(){
+function addRole() {
   db.findAllDepartments()
-  .then(([rows]) => {
-    let departments = rows;
-    const departmentChoices = departments.map(({ id, name }) => ({
-      name: name,
-      value: id,
-    }));
+    .then(([rows]) => {
+      let departments = rows;
+      const departmentChoices = departments.map(({ id, name }) => ({
+        name: name,
+        value: id,
+      }));
 
-    inquirer
-      .prompt([
-        {
-          name: 'roletitle',
-          type: 'input',
-          message: 'What is the title of the role?',
-        },
-        {
-          name: 'salary',
-          type: 'number',
-          message: 'What is the salary of the role?',
-        },
-        {
-          name: 'department_id',
-          type: 'list',
-          message: 'Which department does the role belong to?',
-          choices: departmentChoices,
-        },
-      ])
-      .then((answer) => {
-        db.createRole(answer.roletitle)
-          .then(() => console.log(`Added ${answer.roletitle} to the database`))
-          .then(() => start());
-      });
-  });
+      inquirer
+        .prompt([
+          {
+            name: 'roletitle',
+            type: 'input',
+            message: 'What is the title of the role?',
+          },
+          {
+            name: 'salary',
+            type: 'number',
+            message: 'What is the salary of the role?',
+          },
+          {
+            name: 'department_id',
+            type: 'list',
+            message: 'Which department does the role belong to?',
+            choices: departmentChoices,
+          },
+        ])
+        .then((answer) => {
+          db.createRole(answer.roletitle)
+            .then(() => console.log(`Added ${answer.roletitle} to the database`))
+            .then(() => start());
+        });
+    });
 }
 
 //Add Employee
@@ -241,13 +243,56 @@ const addEmployee = () => {
                         last_name: lastName
                       }
                       db.createEmployee(newEmployee)
-                      .then(() => console.log(`Added ${answer.newEmployee} to the database`))
+                        .then(() => console.log(`Added ${answer.newEmployee} to the database`))
                     })
 
-                    
+
                     .then(() => start())
                 })
             })
         });
     });
 };
+
+
+//Update Employee
+function updateEmployeeRole(){
+  db.findAllEmployees()
+    .then(([rows]) => {
+      let employees = rows;
+      const employeeChoices = employees.map(({ id, first_name, last_name }) => ({
+        name: `${first_name} ${last_name}`,
+        value: id,
+      }));
+
+    db.findAllRoles()
+      .then(([rows]) => {
+        let roles = rows;
+        const roleChoices = roles.map(({ id, title }) => ({
+          name: roletitle,
+          value: id,
+      }));
+      //input new info
+      inquirer.prompt([
+        {
+          type: 'list',
+          name: 'employeeId',
+          message: "Select the employee to update their role",
+          choices: employeeChoices,
+        },
+        {
+          type: 'list',
+          name: 'roleId',
+          message: "Select the employee's new role",
+          choices: roleChoices,
+        },
+      ])
+        .then((answers) => {
+        //prints new ifo and updates db
+          db.updateEmployeeRole(answers.employeeId, answers.roleId)
+            .then(() => console.log(`new employee role updated to database`))
+            .then(() => start());
+        });
+    });
+});
+}
