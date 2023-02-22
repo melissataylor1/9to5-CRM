@@ -126,8 +126,6 @@ const viewBudgetByDepartment = () => {
 }
 
 
-
-
 //Add Department
 function addDepartment(){
   inquirer.prompt([
@@ -149,8 +147,7 @@ function addDepartment(){
   });
 }
 
-
-//Function to Add a Role
+//Add a Role
 function addRole(){
   db.findAllDepartments()
   .then(([rows]) => {
@@ -186,3 +183,71 @@ function addRole(){
       });
   });
 }
+
+//Add Employee
+const addEmployee = () => {
+  inquirer.prompt([
+    {
+      type: 'input',
+      name: 'firstName',
+      message: "What is the new employee's first name?"
+    },
+    {
+      type: 'input',
+      name: 'lastName',
+      message: "What is the new employee's last name?"
+    }
+  ])
+    .then(answer => {
+      let firstName = answer.firstName
+      let lastName = answer.lastName
+      db.findAllRoles()
+        .then(([rows]) => {
+          let roles = rows
+          const roleChoices = roles.map(({ id, title }) => ({
+            name: title,
+            value: id
+          }))
+          //Add role to employee
+          inquirer.prompt({
+            type: 'list',
+            name: 'roleId',
+            message: "What is the employee's role?",
+            choices: roleChoices
+          })
+            .then(answer => {
+              let roleId = answer.roleId
+              db.findAllEmployees()
+                .then(([rows]) => {
+                  let employees = rows
+                  const managerChoices = roles.map(({ id, first_name, last_name }) => ({
+                    name: `${first_name} ${last_name}`,
+                    value: id
+                  }))
+                  managerChoices.unshift({ name: 'None', value: NULL })
+
+                  //Add manager to employee
+                  inquirer.prompt({
+                    type: 'list',
+                    name: 'managerId',
+                    message: "Who is the employee's manager?",
+                    choices: managerChoices
+                  })
+                    .then(answer => {
+                      let newEmployee = {
+                        manager_id: answer.managerId,
+                        role_id: roleId,
+                        first_name: firstName,
+                        last_name: lastName
+                      }
+                      db.createEmployee(newEmployee)
+                      .then(() => console.log(`Added ${answer.newEmployee} to the database`))
+                    })
+
+                    
+                    .then(() => start())
+                })
+            })
+        });
+    });
+};
