@@ -1,7 +1,7 @@
 const mysql = require('mysql2');
 
 // Connecting to SQL database
-const db = mysql.createConnection(
+const connection = mysql.createConnection(
     {
         host: 'localhost',
         user: 'root',
@@ -10,5 +10,10 @@ const db = mysql.createConnection(
     },
     console.log(`Connected to your CRM database.`)
 
-
 );
+
+connection.connect(function(err){
+    if(err) throw err
+  })
+
+  module.exports = connection
