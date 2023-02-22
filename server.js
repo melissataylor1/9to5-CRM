@@ -148,3 +148,41 @@ function addDepartment(){
       .then(() => start());
   });
 }
+
+
+//Function to Add a Role
+function addRole(){
+  db.findAllDepartments()
+  .then(([rows]) => {
+    let departments = rows;
+    const departmentChoices = departments.map(({ id, name }) => ({
+      name: name,
+      value: id,
+    }));
+
+    inquirer
+      .prompt([
+        {
+          name: 'roletitle',
+          type: 'input',
+          message: 'What is the title of the role?',
+        },
+        {
+          name: 'salary',
+          type: 'number',
+          message: 'What is the salary of the role?',
+        },
+        {
+          name: 'department_id',
+          type: 'list',
+          message: 'Which department does the role belong to?',
+          choices: departmentChoices,
+        },
+      ])
+      .then((answer) => {
+        db.createRole(answer.roletitle)
+          .then(() => console.log(`Added ${answer.roletitle} to the database`))
+          .then(() => start());
+      });
+  });
+}
