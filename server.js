@@ -206,8 +206,8 @@ const addEmployee = () => {
       db.findAllRoles()
         .then(([rows]) => {
           let roles = rows
-          const roleChoices = roles.map(({ id, title }) => ({
-            name: title,
+          const roleChoices = roles.map(({ id, roletitle }) => ({
+            name: roletitle,
             value: id
           }))
           //Add role to employee
