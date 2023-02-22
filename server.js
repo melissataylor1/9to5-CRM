@@ -23,37 +23,50 @@ function start() {
         'Add an employee',
         new inquirer.Separator(),
         'Update an employee role',
+        new inquirer.Separator(),
         'Exit'
       ]})
+
+
     .then(answer => {
       switch (answer.options) {
+
         case 'View all employees':
           viewAllEmployees();
           break;
+
         case 'View all departments':
-          viewAllDepartment();
+          viewAllDepartments();
           break;
+
         case 'View employees by Department':
           viewEmployeeByDepartment();
           break;
+
         case 'View all roles':
           viewAllRoles();
           break;
+
         case 'View budgets by Department':
           viewBudgetByDepartment();
           break;
+
         case 'Add employee':
           addEmployee();
           break;
+
         case 'Add department':
           addDepartment();
           break;
+
         case 'Add role':
           addRole();
           break;
+
         case 'Update employee role':
           updateEmployeeRole();
           break;
+
         case 'EXIT':
           console.log("Exiting Application");
           process.exit(0);
@@ -62,7 +75,7 @@ function start() {
     });
 };
 
-//View All Employees Function
+//View All Employees
   const viewAllEmployees = () => {
   db.findAllEmployees()
     .then(([rows]) => {
@@ -72,8 +85,27 @@ function start() {
     .then(() => start())
 }
 
-//View Employee by Department
 
+//View All Roles
+const viewAllRoles = () => {
+  db.findAllRoles()
+    .then(([rows]) => {
+      let roles = rows
+      console.table(roles)
+    })
+    .then(() => start())
+}
+
+//View All Departments
+const viewAllDepartments = () => {
+  db.findAllDepartments()
+    .then(([rows]) => {
+      let departments = rows
+      console.table(departments)
+    })
+    .then(() => start())
+}
+//View Employee by Department
 const viewEmployeeByDepartment = () => {
   db.findAllDepartments()
     .then(([rows]) => {
@@ -83,10 +115,9 @@ const viewEmployeeByDepartment = () => {
     .then(() => start())
 }
 
-//View Employee by Manager
-
+//View Budget by Department
 const viewBudgetByDepartment = () => {
-  db.findAllBudgets()
+  db.findAllDepartments()
     .then(([rows]) => {
       let departments = rows
       console.table(departments)
