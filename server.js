@@ -1,9 +1,8 @@
 //imports packages  
 const inquirer = require('inquirer'); //command line input
-const mysql = require('mysql2'); //connects to mySQL db
-const consoleTable = require('console.table'); //displays data in table on command line
+require('console.table'); //displays data in table on command line
 
-const connection = require('./db/connect'); //SQL access connection
+const db = require('./db'); //SQL access connection
 
 start()
 // Function to prompt the user for what they would like to do
@@ -71,7 +70,8 @@ function start() {
 
         case 'EXIT':
           console.log("Exiting Application");
-          process.exit(0);
+          connection.end();
+          break;
 
       }
     });
@@ -268,7 +268,7 @@ function updateEmployeeRole(){
     db.findAllRoles()
       .then(([rows]) => {
         let roles = rows;
-        const roleChoices = roles.map(({ id, title }) => ({
+        const roleChoices = roles.map(({ id, roletitle }) => ({
           name: roletitle,
           value: id,
       }));

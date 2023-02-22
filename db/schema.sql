@@ -1,7 +1,7 @@
-DROP DATABASE IF EXISTS employee_tracker_db;
-CREATE DATABASE employee_tracker_db;
+DROP DATABASE IF EXISTS CRM_employee_db;
+CREATE DATABASE CRM_employee_db;
 
-USE employee_tracker_db;
+USE CRM_employee_db;
 
 /*department table*/
 CREATE TABLE department (
@@ -10,7 +10,7 @@ CREATE TABLE department (
 );
 
 /*role table*/
-CREATE TABLE role (
+CREATE TABLE roles (
   id INT AUTO_INCREMENT PRIMARY KEY,
   roletitle VARCHAR(30) NOT NULL,
   salary DECIMAL NULL,
