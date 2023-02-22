@@ -85,7 +85,6 @@ function start() {
     .then(() => start())
 }
 
-
 //View All Roles
 const viewAllRoles = () => {
   db.findAllRoles()
@@ -105,6 +104,7 @@ const viewAllDepartments = () => {
     })
     .then(() => start())
 }
+
 //View Employee by Department
 const viewEmployeeByDepartment = () => {
   db.findAllDepartments()
@@ -123,4 +123,28 @@ const viewBudgetByDepartment = () => {
       console.table(departments)
     })
     .then(() => start())
+}
+
+
+
+
+//Add Department
+function addDepartment(){
+  inquirer.prompt([
+    {
+      type: 'input',
+      name: 'newdepartment',
+      message: 'What is the name of the department?',
+      validate: (input) => {
+        if (input === '') {
+          return 'Please enter a department name. Entry cannot be empty.';
+        }
+        return true;
+      },
+    },
+  ]).then((answer) => {
+    db.createDepartment(answer.newdepartment)
+      .then(() => console.log(`Added ${answer.newdepartment} to the database.`))
+      .then(() => start());
+  });
 }
