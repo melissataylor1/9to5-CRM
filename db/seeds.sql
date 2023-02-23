@@ -11,6 +11,11 @@ VALUES ("Web Designer", 50000, 1),
        ("Accountant", 100000, 3),
        ("Sales Associate", 60000, 4),
        ("COO", 350000, 5);
+       ("Graphic Designer", 40000, 1),
+       ("Marketing Associate", 55000, 2),
+       ("Auditor", 110000, 3),
+       ("Sales VP", 105000, 4),
+       ("Operations VP", 150000, 5);
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES ("Melissa", "Taylor", 3, 4),
@@ -18,4 +23,10 @@ VALUES ("Melissa", "Taylor", 3, 4),
        ("Mister", "Name", 2, 3),
        ("Misses", "Example", 5, NULL),
        ("Bob", "Person", 4, 5);
+       ("Taylor", "Green", 6, 4),
+       ("Robert", "Human", 7, NULL),
+       ("Larry", "Bird", 8, 3),
+       ("Michael", "Jordan", 9, NULL),
+       ("Steph", "Curry", 10, 5);
+
 
