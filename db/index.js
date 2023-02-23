@@ -4,6 +4,7 @@ class DB{
     constructor(connection){
         this.connection = connection
     }
+    //View all employees
     findAllEmployees(){
         return this.connection.promise().query(
             `SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name as department, role.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager
@@ -13,6 +14,8 @@ class DB{
             LEFT JOIN employee manager ON manager.id = employee.manager_id;`
         );
     }
+
+    //view all departments
     findAllDepartments() {
         return this.connection.promise().query(
             `SELECT id, name 
@@ -20,6 +23,7 @@ class DB{
         );
     }
 
+    //View all roles
     findAllRoles() {
         return this.connection.promise().query(
             `SELECT role.id, role.title, department.name AS department, role.salary 
@@ -27,6 +31,8 @@ class DB{
             LEFT JOIN department ON role.department_id = department.id`
         );
     }
+
+    //add new employee
     addEmployee(employee) {
         const { first_name, last_name, role_id, manager_id } = employee;
         return this.connection.promise().query(
@@ -35,6 +41,8 @@ class DB{
             [first_name, last_name, role_id, manager_id]
         );
     }
+
+    //Find employees by departments
     findAllEmployeesByDepartment(department_id) {
         return this.connection.promise().query(
             `SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name as department, role.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager
@@ -47,6 +55,8 @@ class DB{
         );
     
     }
+
+    //update employee role
     updateEmployeeRole(employee_id, role_id) {
         return this.connection.promise().query(
             `UPDATE employee 
