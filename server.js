@@ -16,7 +16,6 @@ function start() {
         'View all departments',
         'View all roles',
         'View all employees',
-        'View budgets by Department',
         new inquirer.Separator(),
         'Add a department',
         'Add a role',
@@ -48,10 +47,7 @@ function start() {
           viewAllRoles();
           break;
 
-        case 'View budgets by Department':
-          viewBudgetByDepartment();
-          break;
-
+        
         case 'Add employee':
           addEmployee();
           break;
@@ -109,17 +105,7 @@ const viewAllDepartments = () => {
 
 //View Employee by Department
 const viewEmployeeByDepartment = () => {
-  db.findAllDepartments()
-    .then(([rows]) => {
-      let departments = rows
-      console.table(departments)
-    })
-    .then(() => start())
-}
-
-//View Budget by Department
-const viewBudgetByDepartment = () => {
-  db.findAllDepartments()
+  db.findAllEmployeesByDepartment()
     .then(([rows]) => {
       let departments = rows
       console.table(departments)
