@@ -13,4 +13,18 @@ class DB{
             LEFT JOIN employee manager ON manager.id = employee.manager_id;`
         );
     }
+    findAllDepartments() {
+        return this.connection.promise().query(
+            `SELECT id, name 
+            FROM department`
+        );
+    }
+
+    findAllRoles() {
+        return this.connection.promise().query(
+            `SELECT role.id, role.title, department.name AS department, role.salary 
+            FROM role 
+            LEFT JOIN department ON role.department_id = department.id`
+        );
+    }
 }
