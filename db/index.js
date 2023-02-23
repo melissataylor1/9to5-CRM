@@ -27,4 +27,12 @@ class DB{
             LEFT JOIN department ON role.department_id = department.id`
         );
     }
+    addEmployee(employee) {
+        const { first_name, last_name, role_id, manager_id } = employee;
+        return this.connection.promise().query(
+            `INSERT INTO employee (first_name, last_name, role_id, manager_id)
+            VALUES (?, ?, ?, ?)`,
+            [first_name, last_name, role_id, manager_id]
+        );
+    }
 }
