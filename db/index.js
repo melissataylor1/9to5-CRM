@@ -47,6 +47,14 @@ class DB{
         );
     
     }
+    updateEmployeeRole(employee_id, role_id) {
+        return this.connection.promise().query(
+            `UPDATE employee 
+            SET role_id = ? 
+            WHERE id = ?`,
+            [role_id, employee_id]
+        );
+    }
 }
 
 module.exports = new DB(connection);
