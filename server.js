@@ -1,8 +1,15 @@
 //imports packages  
+const express = require('express');
+const fs = require("fs");
 const inquirer = require('inquirer'); //command line input
 require('console.table'); //displays data in table on command line
 
-const db = require('./db'); //SQL access connection
+const PORT = process.env.PORT || 3001;
+const app = express();
+
+// Express middleware
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 start()
 // Function to prompt the user for what they would like to do
@@ -16,6 +23,7 @@ function start() {
         'View all departments',
         'View all roles',
         'View all employees',
+        'View employees by Department',
         new inquirer.Separator(),
         'Add a department',
         'Add a role',
@@ -23,7 +31,8 @@ function start() {
         new inquirer.Separator(),
         'Update an employee role',
         new inquirer.Separator(),
-        'Exit'
+        'Exit',
+        new inquirer.Separator(),
       ]
     })
 
