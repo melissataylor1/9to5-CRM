@@ -7,7 +7,7 @@ class DB{
     //View all employees
     findAllEmployees(){
         return this.connection.promise().query(
-            `SELECT employee.id, employee.first_name, employee.last_name, roles.roletitle, department.name as department, roles.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager
+            `SELECT employee.id, employee.first_name, employee.last_name, roles.title, department.name as department, roles.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager
             FROM employee 
             LEFT JOIN roles ON employee.role_id = roles.id 
             LEFT JOIN department ON roles.department_id = department.id 
@@ -32,6 +32,40 @@ class DB{
         );
     }
 
+    //View department budget
+    viewDepartmentBudget() {
+        return this.connection.promise().query(`
+          SELECT department.name AS department_name, SUM(roles.salary) AS total_salary_budget
+          FROM department
+          JOIN roles ON department.id = roles.department_id
+          JOIN employee ON roles.id = employee.role_id
+          GROUP BY department.name;
+        `)
+        .then(([rows]) => {
+          console.table(rows);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+      }
+      
+      start() {
+        this.viewDepartmentBudget();
+      }
+    
+      createDepartment(department) {
+        return this.connection.promise().query("INSERT INTO department SET ?", department);
+      }
+    
+      createRole(role) {
+        return this.connection.promise().query("INSERT INTO role SET ?", role);
+      }
+    
+      createEmployee(employee) {
+        return this.connection.promise().query("INSERT INTO employee SET ?", employee);
+      }
+    
+    
     //add new employee
     addEmployee(employee) {
         const { first_name, last_name, role_id, manager_id } = employee;

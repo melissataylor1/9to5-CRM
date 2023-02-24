@@ -35,7 +35,7 @@ function start() {
         'View all departments',
         'View all roles',
         'View all employees',
-        'View employees by Department',
+        'View Department Budget',
         new inquirer.Separator(),
         'Add a department',
         'Add a role',
@@ -43,7 +43,7 @@ function start() {
         new inquirer.Separator(),
         'Update an employee role',
         new inquirer.Separator(),
-        'Exit',
+        'EXIT',
         new inquirer.Separator(),
       ]
     })
@@ -64,9 +64,9 @@ function start() {
           viewAllEmployees();
           break;
 
-        case 'View employees by Department':
-          viewEmployeeByDepartment();
-          break;
+          case "View Department Budget":
+            viewDepartmentBudget();
+            break;
 
           case 'Add a department':
             addDepartment();
@@ -81,7 +81,7 @@ function start() {
           break;
 
      
-        case 'Update employee role':
+        case 'Update an employee role':
           updateEmployeeRole();
           break;
 
@@ -124,14 +124,14 @@ const viewAllDepartments = () => {
     .then(() => start())
 }
 
-//View Employee by Department
-const viewEmployeeByDepartment = () => {
-  db.findAllEmployeesByDepartment()
+//View Department Budget
+function viewDepartmentBudget() {
+  db.viewDepartmentBudget()
     .then(([rows]) => {
-      let departments = rows
-      console.table(departments)
+      const budget = rows;
+      console.table(budget);
     })
-    .then(() => start())
+      .then(() => start())
 }
 
 
@@ -259,8 +259,8 @@ function updateEmployeeRole(){
     db.findAllRoles()
       .then(([rows]) => {
         let roles = rows;
-        const roleChoices = roles.map(({ id, roletitle }) => ({
-          name: roletitle,
+        const roleChoices = roles.map(({ id, title }) => ({
+          name: title,
           value: id,
       }));
       //input new info
