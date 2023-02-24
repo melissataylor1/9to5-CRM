@@ -11,12 +11,13 @@ CREATE TABLE department (
 
 /*role table*/
 CREATE TABLE roles (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(30) UNIQUE NOT NULL,
-    salary DECIMAL NOT NULL,
-    department_id INT NOT NULL,
-    INDEX dep_ind (department_id),
-    CONSTRAINT fk_department FOREIGN KEY (department_id) REFERENCES department(id) ON DELETE CASCADE
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  roletitle VARCHAR(30) NOT NULL,
+  salary DECIMAL NULL,
+  department_id INT NOT NULL,
+  FOREIGN KEY (department_id)
+  REFERENCES department(id)
+  ON DELETE CASCADE
 );
 
 /*employee table*/

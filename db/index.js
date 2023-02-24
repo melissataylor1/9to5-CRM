@@ -7,10 +7,10 @@ class DB{
     //View all employees
     findAllEmployees(){
         return this.connection.promise().query(
-            `SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name as department, role.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager
+            `SELECT employee.id, employee.first_name, employee.last_name, roles.roletitle, department.name as department, roles.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager
             FROM employee 
-            LEFT JOIN role ON employee.role_id = role.id 
-            LEFT JOIN department ON role.department_id = department.id 
+            LEFT JOIN roles ON employee.role_id = roles.id 
+            LEFT JOIN department ON roles.department_id = department.id 
             LEFT JOIN employee manager ON manager.id = employee.manager_id;`
         );
     }
@@ -23,14 +23,15 @@ class DB{
         );
     }
 
-    //View all role
+    //View all roles
     findAllRoles() {
         return this.connection.promise().query(
-            `SELECT role.id, role.title, department.name AS department, role.salary 
-            FROM role 
+            `SELECT roles.id, roles.title, department.name AS department, roles.salary 
+            FROM roles
             LEFT JOIN department ON role.department_id = department.id`
         );
     }
+
     //add new employee
     addEmployee(employee) {
         const { first_name, last_name, role_id, manager_id } = employee;
@@ -44,10 +45,10 @@ class DB{
     //Find employees by departments
     findAllEmployeesByDepartment(department_id) {
         return this.connection.promise().query(
-            `SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name as department, role.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager
+            `SELECT employee.id, employee.first_name, employee.last_name, roles.title, department.name as department, roles.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager
             FROM employee 
-            LEFT JOIN role ON employee.role_id = role.id 
-            LEFT JOIN department ON role.department_id = department.id 
+            LEFT JOIN roles ON employee.role_id = role.id 
+            LEFT JOIN department ON roles.department_id = department.id 
             LEFT JOIN employee manager ON manager.id = employee.manager_id 
             WHERE department.id = ?`,
             [department_id]
