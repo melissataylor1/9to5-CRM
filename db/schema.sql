@@ -1,7 +1,7 @@
-DROP DATABASE IF EXISTS CRM_employee_db;
-CREATE DATABASE CRM_employee_db;
+DROP DATABASE IF EXISTS crm_employee_db;
+CREATE DATABASE crm_employee_db;
 
-USE CRM_employee_db;
+USE crm_employee_db;
 
 /*department table*/
 CREATE TABLE department (
@@ -28,9 +28,9 @@ CREATE TABLE employee (
     role_id INT NOT NULL,
     manager_id INT NULL,
     FOREIGN KEY (role_id)
-    REFERENCES role(id)
+    REFERENCES roles (id)
     ON DELETE CASCADE,
     FOREIGN KEY (manager_id)
-    REFERENCES employee(id)
+    REFERENCES employee (id)
     ON DELETE SET NULL
 );

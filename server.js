@@ -1,10 +1,12 @@
 //imports packages  
 const express = require('express');
 const fs = require("fs");
+
+const db = require('./db/index');
 const inquirer = require('inquirer'); //command line input
 require('console.table'); //displays data in table on command line
-
-const PORT = process.env.PORT || 3001;
+const connection = require("./db/connect");
+const PORT = process.env.PORT || 3000;
 const app = express();
 
 // Express middleware
