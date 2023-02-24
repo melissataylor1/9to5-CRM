@@ -13,6 +13,16 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+
+console.log(`
+┏━━━┓━━━━━┏┓━━━━━━━━━┏━━━┓━━━━┏━━━┓┏━━━┓┏━┓┏━┓
+┃┏━┓┃━━━━┏┛┗┓━━━━━━━━┃┏━━┛━━━━┃┏━┓┃┃┏━┓┃┃┃┗┛┃┃
+┃┗━┛┃━━━━┗┓┏┛┏━━┓━━━━┃┗━━┓━━━━┃┃━┗┛┃┗━┛┃┃┏┓┏┓┃
+┗━━┓┃━━━━━┃┃━┃┏┓┃━━━━┗━━┓┃━━━━┃┃━┏┓┃┏┓┏┛┃┃┃┃┃┃
+┏━━┛┃━━━━━┃┗┓┃┗┛┃━━━━┏━━┛┃━━━━┃┗━┛┃┃┃┃┗┓┃┃┃┃┃┃
+┗━━━┛━━━━━┗━┛┗━━┛━━━━┗━━━┛━━━━┗━━━┛┗┛┗━┛┗┛┗┛┗┛
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ `);
 start()
 // Function to prompt the user for what they would like to do
 function start() {
@@ -147,109 +157,93 @@ function addDepartment() {
 }
 
 //Add a Role
-function addRole() {
+function addRole(){
   db.findAllDepartments()
-    .then(([rows]) => {
-      let departments = rows;
-      const departmentChoices = departments.map(({ id, name }) => ({
-        name: name,
-        value: id,
-      }));
+  .then(([rows]) => {
+    let departments = rows;
+    const departmentChoices = departments.map(({ id, name }) => ({
+      name: name,
+      value: id,
+    }));
 
-      inquirer
-        .prompt([
+    inquirer
+      .prompt([
+        {
+          name: 'title',
+          type: 'input',
+          message: 'What is the title of the role?',
+        },
+        {
+          name: 'salary',
+          type: 'number',
+          message: 'What is the salary of the role?',
+        },
+        {
+          name: 'department_id',
+          type: 'list',
+          message: 'Which department does the role belong to?',
+          choices: departmentChoices,
+        },
+      ])
+      .then((answer) => {
+        db.createRole(answer)
+          .then(() => console.log(`Added ${answer.title} to the database`))
+          .then(() => start());
+      });
+  });
+}
+
+//Function to Add an Employee
+function addEmployee(){
+  db.findAllRoles()
+  .then(([rows]) => {
+    let roles = rows;
+    const roleChoices = roles.map(({ id, title }) => ({
+      name: title,
+      value: id,
+    }));
+
+    db.findAllEmployees()
+      .then(([rows]) => {
+        let employees = rows;
+        const managerChoices = employees.map(({ id, first_name, last_name }) => ({
+          name: `${first_name} ${last_name}`,
+          value: id,
+        }));
+
+        inquirer.prompt([
           {
-            name: 'roletitle',
-            type: 'input',
-            message: 'What is the title of the role?',
+            type: "input",
+            name: "first_name",
+            message: "Enter the employee's first name:",
           },
           {
-            name: 'salary',
-            type: 'number',
-            message: 'What is the salary of the role?',
+            type: "input",
+            name: "last_name",
+            message: "Enter the employee's last name:",
           },
           {
-            name: 'department_id',
-            type: 'list',
-            message: 'Which department does the role belong to?',
-            choices: departmentChoices,
+            type: "list",
+            name: "role_id",
+            message: "Select the employee's role:",
+            choices: roleChoices,
+          },
+          {
+            type: "list",
+            name: "manager_id",
+            message: "Select the employee's manager:",
+            choices: managerChoices,
           },
         ])
         .then((answer) => {
-          db.createRole(answer.roletitle)
-            .then(() => console.log(`Added ${answer.roletitle} to the database`))
-            .then(() => start());
+          db.createEmployee(answer)
+            .then(() => console.log(`Added ${answer.first_name} ${answer.last_name} to the database`))
+            .then(() => start())
+            .catch((err) => console.log(err));
         });
-    });
+      });
+  });
 }
-
-//Add Employee
-const addEmployee = () => {
-  inquirer.prompt([
-    {
-      type: 'input',
-      name: 'firstName',
-      message: "What is the new employee's first name?"
-    },
-    {
-      type: 'input',
-      name: 'lastName',
-      message: "What is the new employee's last name?"
-    }
-  ])
-    .then(answer => {
-      let firstName = answer.firstName
-      let lastName = answer.lastName
-      db.findAllRoles()
-        .then(([rows]) => {
-          let roles = rows
-          const roleChoices = roles.map(({ id, roletitle }) => ({
-            name: roletitle,
-            value: id
-          }))
-          //Add role to employee
-          inquirer.prompt({
-            type: 'list',
-            name: 'roleId',
-            message: "What is the employee's role?",
-            choices: roleChoices
-          })
-            .then(answer => {
-              let roleId = answer.roleId
-              db.findAllEmployees()
-                .then(([rows]) => {
-                  let employees = rows
-                  const managerChoices = roles.map(({ id, first_name, last_name }) => ({
-                    name: `${first_name} ${last_name}`,
-                    value: id
-                  }))
-                  managerChoices.unshift({ name: 'None', value: NULL })
-
-                  //Add manager to employee
-                  inquirer.prompt({
-                    type: 'list',
-                    name: 'managerId',
-                    message: "Who is the employee's manager?",
-                    choices: managerChoices
-                  })
-                    .then(answer => {
-                      let newEmployee = {
-                        manager_id: answer.managerId,
-                        role_id: roleId,
-                        first_name: firstName,
-                        last_name: lastName
-                      }
-                      db.createEmployee(newEmployee)
-                        .then(() => console.log(`Added ${answer.newEmployee} to the database`))
-                    })
-
-
-                    .then(() => start())
-                })
-            })
-        });
-    });
-};
 
 
 //Update Employee
