@@ -33,9 +33,9 @@ function start() {
       message: 'What would you like to do?',
       choices: [
         'View all departments',
-        'View all roles',
+        'View all role',
         'View all employees',
-        'View Department Budget',
+        'View employees by Department',
         new inquirer.Separator(),
         'Add a department',
         'Add a role',
@@ -43,7 +43,7 @@ function start() {
         new inquirer.Separator(),
         'Update an employee role',
         new inquirer.Separator(),
-        'EXIT',
+        'Exit',
         new inquirer.Separator(),
       ]
     })
@@ -56,7 +56,7 @@ function start() {
           viewAllDepartments();
           break;
 
-          case 'View all roles':
+          case 'View all role':
             viewAllRoles();
             break;
   
@@ -64,9 +64,9 @@ function start() {
           viewAllEmployees();
           break;
 
-          case "View Department Budget":
-            viewDepartmentBudget();
-            break;
+        case 'View employees by Department':
+          viewEmployeeByDepartment();
+          break;
 
           case 'Add a department':
             addDepartment();
@@ -81,7 +81,7 @@ function start() {
           break;
 
      
-        case 'Update an employee role':
+        case 'Update employee role':
           updateEmployeeRole();
           break;
 
@@ -105,13 +105,13 @@ const viewAllEmployees = () => {
 }
 
 //View All Roles
-const viewAllRoles = () => {
+function viewAllRoles() {
   db.findAllRoles()
-    .then(([rows]) => {
-      let roles = rows
-      console.table(roles)
-    })
-    .then(() => start())
+  .then(([rows]) => {
+    const roles = rows;
+    console.table(roles);
+  })
+  .then(() => start());
 }
 
 //View All Departments
@@ -124,14 +124,14 @@ const viewAllDepartments = () => {
     .then(() => start())
 }
 
-//View Department Budget
-function viewDepartmentBudget() {
-  db.viewDepartmentBudget()
+//View Employee by Department
+const viewEmployeeByDepartment = () => {
+  db.findAllEmployeesByDepartment()
     .then(([rows]) => {
-      const budget = rows;
-      console.table(budget);
+      let departments = rows
+      console.table(departments)
     })
-      .then(() => start())
+    .then(() => start())
 }
 
 
@@ -259,8 +259,8 @@ function updateEmployeeRole(){
     db.findAllRoles()
       .then(([rows]) => {
         let roles = rows;
-        const roleChoices = roles.map(({ id, title }) => ({
-          name: title,
+        const roleChoices = roles.map(({ id, roletitle }) => ({
+          name: roletitle,
           value: id,
       }));
       //input new info
