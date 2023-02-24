@@ -52,35 +52,35 @@ function start() {
     .then(answer => {
       switch (answer.options) {
 
-        case 'View all employees':
-          viewAllEmployees();
-          break;
-
         case 'View all departments':
           viewAllDepartments();
+          break;
+
+          case 'View all roles':
+            viewAllRoles();
+            break;
+  
+        case 'View all employees':
+          viewAllEmployees();
           break;
 
         case 'View employees by Department':
           viewEmployeeByDepartment();
           break;
 
-        case 'View all roles':
-          viewAllRoles();
-          break;
-
-        
-        case 'Add employee':
+          case 'Add a department':
+            addDepartment();
+            break;
+  
+            case 'Add a role':
+              addRole();
+              break;
+    
+        case 'Add an employee':
           addEmployee();
           break;
 
-        case 'Add department':
-          addDepartment();
-          break;
-
-        case 'Add role':
-          addRole();
-          break;
-
+     
         case 'Update employee role':
           updateEmployeeRole();
           break;
@@ -140,7 +140,7 @@ function addDepartment() {
   inquirer.prompt([
     {
       type: 'input',
-      name: 'newdepartment',
+      name: 'name',
       message: 'What is the name of the department?',
       validate: (input) => {
         if (input === '') {
@@ -150,8 +150,8 @@ function addDepartment() {
       },
     },
   ]).then((answer) => {
-    db.createDepartment(answer.newdepartment)
-      .then(() => console.log(`Added ${answer.newdepartment} to the database.`))
+    db.createDepartment(answer.name)
+      .then(() => console.log(`Added ${answer.name} to the database.`))
       .then(() => start());
   });
 }
