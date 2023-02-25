@@ -25,7 +25,6 @@ function start() {
         'View all departments',
         'View all roles',
         'View all employees',
-        'View employees by Department',
         new inquirer.Separator(),
         'Add a department',
         'Add a role',
@@ -33,7 +32,7 @@ function start() {
         new inquirer.Separator(),
         'Update an employee role',
         new inquirer.Separator(),
-        'Exit',
+        'EXIT',
         new inquirer.Separator(),
       ]
     })
@@ -50,28 +49,25 @@ function start() {
           viewAllDepartments();
           break;
 
-        case 'View employees by Department':
-          viewEmployeeByDepartment();
-          break;
 
         case 'View all roles':
           viewAllRoles();
           break;
 
         
-        case 'Add employee':
+        case 'Add an employee':
           addEmployee();
           break;
 
-        case 'Add department':
+        case 'Add a department':
           addDepartment();
           break;
 
-        case 'Add role':
+        case 'Add a role':
           addRole();
           break;
 
-        case 'Update employee role':
+        case 'Update an employee role':
           updateEmployeeRole();
           break;
 
@@ -114,37 +110,29 @@ const viewAllDepartments = () => {
     .then(() => start())
 }
 
-//View Employee by Department
-const viewEmployeeByDepartment = () => {
-  db.findAllEmployeesByDepartment()
-    .then(([rows]) => {
-      let departments = rows
-      console.table(departments)
-    })
-    .then(() => start())
-}
 
 
 //Add Department
-function addDepartment() {
+function addDepartment(){
   inquirer.prompt([
     {
       type: 'input',
-      name: 'newdepartment',
+      name: 'name',
       message: 'What is the name of the department?',
       validate: (input) => {
         if (input === '') {
-          return 'Please enter a department name. Entry cannot be empty.';
+          return 'Department name cannot be empty.';
         }
         return true;
       },
     },
   ]).then((answer) => {
-    db.createDepartment(answer.newdepartment)
-      .then(() => console.log(`Added ${answer.newdepartment} to the database.`))
+    db.createDepartment(answer)
+      .then(() => console.log(`Added ${answer.name} to the database.`))
       .then(() => start());
   });
 }
+
 
 //Add a Role
 function addRole() {

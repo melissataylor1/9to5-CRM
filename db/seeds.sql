@@ -6,7 +6,7 @@ VALUES ('Design'),
        ('Corporate Development'),
        ('Operations');
 
-INSERT INTO roles (roletitle, salary, department_id)
+INSERT INTO role (title, salary, department_id)
 VALUES ("Web Designer", 50000, 1),
        ("Marketing Manager", 80000, 2),
        ("Accountant", 100000, 3),
@@ -29,4 +29,5 @@ VALUES ("Melissa", "Taylor", 3, NULL),
        ("Larry", "Bird", 8, NULL),
        ("Michael", "Jordan", 9, NULL),
        ("Steph", "Curry", 10, NULL);
+
 
